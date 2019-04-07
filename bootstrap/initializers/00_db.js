@@ -22,14 +22,7 @@ export default (self) => {
     }
   }
   const { database, port, host } = config.connection
-  const { log } = self
-  const handler = (targetValue, { prototype, target }, ...args) => {
-    if (!prototype.includes('_')) {
-      log('info', '%s - %s Params: %s', target.constructor.name, prototype, util.inspect(args))
-    }
-    return targetValue.apply(target, args)
-  }
-  const query_wrapper = createProxy(new QueryWrapper(db_schema, knex, config), handler)
+  const query_wrapper = createProxy(new QueryWrapper(db_schema, knex, config))
   self.DB = query_wrapper
   self.knex = query_wrapper.knex
   const schema_builder = new SchemaBuilder(db_schema, query_wrapper)

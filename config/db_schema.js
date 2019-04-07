@@ -10,9 +10,9 @@ module.exports = {
           required: true
         },
         {
-          column_name: 'legal_name',
+          column_name: 'description',
           type: 'string',
-          required: true
+          default: ''
         }
       ]
     },
@@ -28,12 +28,30 @@ module.exports = {
         {
           column_name: 'first_name',
           type: 'string',
-          required: true
+          // required: true,
+          default: ''
         },
         {
           column_name: 'last_name',
           type: 'string',
-          required: true
+          // required: true,
+          default: ''
+        },
+        {
+          column_name: 'role',
+          type: 'string',
+          // required: true,
+          default: ''
+        },
+        {
+          column_name: 'company_id',
+          type: 'uuid',
+          foreign_key: true,
+          // required: true,
+          reference_table: 'tbl_Company',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
         }
       ]
     },

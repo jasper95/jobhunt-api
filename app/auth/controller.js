@@ -13,6 +13,12 @@ export default class UserController {
   async getSession({ session }) {
     const { user_id, token } = session
     const [user] = await this.DB.filter('tbl_User', { id: user_id })
+    if (user.role === 'ADMIN' && user.company_id) {
+      const [company] = await this.DB.filter('tbl_Company', { id: user.company_id })
+      if (company) {
+        user.company = company
+      }
+    }
     return {
       ...user,
       token
@@ -20,6 +26,11 @@ export default class UserController {
   }
 
   async signup({ params }) {
+    if (params.role === 'ADMIN') {
+      const company = await this.DB.insert('tbl_Company', { name: params.company_name })
+      params.company_id = company.id
+    }
+
     const user = await this.DB.insert('tbl_User', params)
     const salt = generateSalt()
     this.DB.insert('tbl_UserAuth',

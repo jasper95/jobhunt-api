@@ -16,13 +16,14 @@
     "dotenv": "^6.0.0",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.14.6",
-    "knex-wrapper": "^1.1.5",
+    "knex-wrapper": "^1.1.12",
     "lodash": "^4.17.10",
     "morgan": "^1.9.0",
     "nconf": "^0.10.0",
     "pg": "^7.4.3",
     "restify": "^7.2.1",
     "restify-cors-middleware": "^1.1.1",
+    "uuid": "^3.3.2",
     "winston": "^3.0.0"
   },
   "devDependencies": {

@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 export default class BaseController {
   constructor({ DB, knex, Model }) {
     this.DB = DB
@@ -22,7 +24,7 @@ export default class BaseController {
 
   async updateNode({ params }) {
     const { node } = params
-    return this.DB.updateById(this.Model.base.getTable(node), params)
+    return this.DB.updateById(this.Model.base.getTable(node), omit(params, 'node'))
   }
 
   async deleteNode({ params }) {

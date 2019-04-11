@@ -6,8 +6,8 @@ export default class BaseController {
   }
 
   async getNodeList({ params }) {
-    const { node } = params
-    return this.DB.filter(this.Model.base.getTable(node))
+    const { node, fields = [], ...other_params } = params
+    return this.DB.filter(this.Model.base.getTable(node), other_params, fields)
   }
 
   async getNodeDetails({ params }) {

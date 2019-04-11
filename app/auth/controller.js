@@ -47,6 +47,9 @@ export default class UserController {
   async login({ params }) {
     const { email, password } = params
     const [user] = await this.DB.filter('tbl_User', { email })
+    if (!user) {
+      throw { success: false, message: 'Email does not exists' }
+    }
     const { id } = user
     const [{ salt, password: hash_password }] = await this.DB.filter('tbl_UserAuth', { user_id: id })
     const hash = generateHash(password, salt)

@@ -17,40 +17,6 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Experience',
-      columns: [
-        {
-          column_name: 'position',
-          type: 'string',
-          required: true
-        },
-        {
-          column_name: 'user_id',
-          type: 'uuid',
-          foreign_key: true,
-          required: true,
-          reference_table: 'tbl_User',
-          reference_column: 'id',
-          on_update: 'CASCADE',
-          on_delete: 'RESTRICT'
-        },
-        {
-          column_name: 'company',
-          type: 'string',
-          required: true
-        },
-        {
-          column_name: 'start_date',
-          type: 'date',
-          required: true
-        },
-        {
-          column_name: 'end_date',
-          type: 'date'
-        }
-      ]
-    },
-    {
       table_name: 'tbl_User',
       columns: [
         {
@@ -81,7 +47,6 @@ module.exports = {
           column_name: 'company_id',
           type: 'uuid',
           foreign_key: true,
-          // required: true,
           reference_table: 'tbl_Company',
           reference_column: 'id',
           on_update: 'CASCADE',
@@ -139,6 +104,40 @@ module.exports = {
           type: 'string',
           default: 'Web',
           required: true
+        }
+      ]
+    },
+    {
+      table_name: 'tbl_Experience',
+      columns: [
+        {
+          column_name: 'position',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'user_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_User',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'company',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'start_date',
+          type: 'datetime',
+          required: true
+        },
+        {
+          column_name: 'end_date',
+          type: 'datetime'
         }
       ]
     }

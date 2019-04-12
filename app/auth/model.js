@@ -8,7 +8,6 @@ class AuthModel {
   }
 
   async authenticateUser(user) {
-    console.log('process.env.AUTH_SECRET', process.env.AUTH_SECRET)
     const session = await this.DB.insert('tbl_UserSession', { user_id: user.id, status: 'Online', device_type: 'Web' })
     return jwt.sign(session, process.env.AUTH_SECRET, {
       expiresIn: process.env.AUTH_VALIDITY

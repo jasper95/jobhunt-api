@@ -1,5 +1,3 @@
-import { omit } from 'lodash'
-
 export default class BaseController {
   constructor({ DB, knex, Model }) {
     this.DB = DB
@@ -17,14 +15,17 @@ export default class BaseController {
     return this.DB.filter(this.Model.base.getTable(node), params)
   }
 
-  async createNode({ params }) {
+  async createNode({ params, session }) {
     const { node } = params
+    if (node === 'experience') {
+      params.user_id = session.user_id
+    }
     return this.DB.insert(this.Model.base.getTable(node), params)
   }
 
   async updateNode({ params }) {
     const { node } = params
-    return this.DB.updateById(this.Model.base.getTable(node), omit(params, 'node'))
+    return this.DB.updateById(this.Model.base.getTable(node), params)
   }
 
   async deleteNode({ params }) {

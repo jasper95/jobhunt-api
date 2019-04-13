@@ -140,6 +140,70 @@ module.exports = {
           type: 'datetime'
         }
       ]
+    },
+    {
+      table_name: 'tbl_Skill',
+      columns: [
+        {
+          column_name: 'user_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_User',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'name',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'level',
+          type: 'integer',
+          required: true
+        }
+      ]
+    },
+    {
+      table_name: 'tbl_Education',
+      columns: [
+        {
+          column_name: 'user_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_User',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'name',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'qualification',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'school',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'start_date',
+          type: 'datetime',
+          required: true
+        },
+        {
+          column_name: 'end_date',
+          type: 'datetime'
+        }
+      ]
     }
   ]
 }

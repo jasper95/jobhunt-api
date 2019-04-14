@@ -21,7 +21,7 @@ export default (self) => {
             return res.send(400, { code: 'BadRequest', message: err.message })
           }
           log('error', '%s - %s [Error: %s]', class_name, prototype, util.inspect(err))
-          return res.send(500, { code: 'InternalError', message: util.inspect(err) })
+          return res.send(500, { code: 'InternalServer', message: util.inspect(err) })
         })
     }
     log('warn', '%s - %s [Error: %s]', class_name, prototype, util.inspect(req.auth_error))

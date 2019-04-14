@@ -21,7 +21,7 @@ export default async (req, res, next) => {
   if (unprotected_routes[req.method].includes(req.url)) {
     if (req.username !== process.env.BASIC_USERNAME
       || req.authorization.basic.password !== process.env.BASIC_PASSWORD) {
-      auth_error = 'Incorrect basic auth credentials'
+      auth_error = 'Invalid credentials'
       authenticated = false
     }
   } else if (token) {
@@ -36,10 +36,10 @@ export default async (req, res, next) => {
       }
     } catch (err) {
       authenticated = false
-      auth_error = err
+      auth_error = err.message
     }
   } else {
-    auth_error = 'Invalid Token'
+    auth_error = 'Authentication is required'
     authenticated = false
   }
   req.authenticated = authenticated

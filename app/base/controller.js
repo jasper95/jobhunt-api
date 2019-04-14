@@ -17,7 +17,7 @@ export default class BaseController {
 
   async createNode({ params, session }) {
     const { node } = params
-    if (['experience', 'skill'].includes(node)) {
+    if (['experience', 'skill', 'education'].includes(node)) {
       params.user_id = session.user_id
     }
     return this.DB.insert(this.Model.base.getTable(node), params)

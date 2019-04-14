@@ -32,6 +32,27 @@ module.exports = {
           default: ''
         },
         {
+          column_name: 'contact_number',
+          type: 'string',
+          // required: true,
+          default: ''
+        },
+        {
+          column_name: 'birth_date',
+          type: 'datetime'
+        },
+        {
+          column_name: 'address',
+          type: 'string',
+          default: ''
+        },
+        {
+          column_name: 'nationality',
+          type: 'string',
+          // required: true,
+          default: ''
+        },
+        {
           column_name: 'last_name',
           type: 'string',
           // required: true,

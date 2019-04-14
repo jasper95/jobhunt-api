@@ -16,7 +16,7 @@
     "dotenv": "^6.0.0",
     "jsonwebtoken": "^8.3.0",
     "knex": "^0.14.6",
-    "knex-wrapper": "^1.1.18",
+    "knex-wrapper": "^1.1.19",
     "lodash": "^4.17.10",
     "morgan": "^1.9.0",
     "nconf": "^0.10.0",

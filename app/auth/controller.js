@@ -27,7 +27,7 @@ export default class UserController {
 
   async signup({ params }) {
     if (params.role === 'ADMIN') {
-      const company = await this.DB.insert('tbl_Company', { name: params.company_name })
+      const company = await this.DB.insert('tbl_Company', { ...params, name: params.company_name })
       params.company_id = company.id
     }
 

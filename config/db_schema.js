@@ -13,6 +13,17 @@ module.exports = {
           column_name: 'description',
           type: 'string',
           default: ''
+        },
+        {
+          column_name: 'email',
+          type: 'string',
+          default: '',
+          required: true
+        },
+        {
+          column_name: 'contact_number',
+          type: 'string',
+          default: ''
         }
       ]
     },

@@ -199,6 +199,16 @@ module.exports = {
       ]
     },
     {
+      table_name: 'tbl_JobCategory',
+      columns: [
+        {
+          column_name: 'name',
+          type: 'string',
+          required: true
+        }
+      ]
+    },
+    {
       table_name: 'tbl_Education',
       columns: [
         {
@@ -230,6 +240,50 @@ module.exports = {
           column_name: 'start_date',
           type: 'datetime',
           required: true
+        },
+        {
+          column_name: 'end_date',
+          type: 'datetime'
+        }
+      ]
+    },
+    {
+      table_name: 'tbl_Job',
+      columns: [
+        {
+          column_name: 'company_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_Company',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'name',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'description',
+          type: 'jsonb',
+          required: true
+        },
+        {
+          column_name: 'tags',
+          type: 'jsonb',
+          default: '[]'
+        },
+        {
+          column_name: 'job_category_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_JobCategory',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
         },
         {
           column_name: 'end_date',

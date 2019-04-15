@@ -1,8 +1,8 @@
-import { upperFirst, snakeCase } from 'lodash'
+import { upperFirst, camelCase } from 'lodash'
 
 class BaseModel {
   getTable(node) {
-    return `tbl_${upperFirst(snakeCase(node))}`
+    return `tbl_${upperFirst(camelCase(node))}`
   }
 }
 

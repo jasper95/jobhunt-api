@@ -11,15 +11,13 @@ export default class BaseController {
   }
 
   async getNodeDetails({ params }) {
-    const { node } = params
-    return this.DB.filter(this.Model.base.getTable(node), params)
+    const { node, id } = params
+    const [data] = await this.DB.find(this.Model.base.getTable(node), id)
+    return data
   }
 
-  async createNode({ params, session }) {
+  async createNode({ params }) {
     const { node } = params
-    if (['experience', 'skill', 'education'].includes(node)) {
-      params.user_id = session.user_id
-    }
     return this.DB.insert(this.Model.base.getTable(node), params)
   }
 

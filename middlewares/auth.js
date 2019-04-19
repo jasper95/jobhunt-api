@@ -1,10 +1,13 @@
 import jwt from 'jsonwebtoken'
+import pathToRegexp from 'path-to-regexp'
 import {
   serviceLocator
 } from '../utils'
 
 const unprotected_routes = {
-  GET: [],
+  GET: [
+    '/job/:id'
+  ],
   POST: [
     '/signup',
     '/login'
@@ -18,7 +21,7 @@ export default async (req, res, next) => {
   let authenticated = true
   let auth_error = ''
   const { token } = req.headers
-  if (unprotected_routes[req.method].includes(req.url)) {
+  if (unprotected_routes[req.method].some(pathname => pathToRegexp(pathname).test(req.getPath()))) {
     if (req.username !== process.env.BASIC_USERNAME
       || req.authorization.basic.password !== process.env.BASIC_PASSWORD) {
       auth_error = 'Invalid credentials'

@@ -266,12 +266,42 @@ module.exports = {
           required: true
         },
         {
+          column_name: 'slug',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'status',
+          type: 'string',
+          default: 'Active'
+        },
+        {
+          column_name: 'province',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'municipality',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'barangay',
+          type: 'string',
+          required: true
+        },
+        {
+          column_name: 'street',
+          type: 'string',
+          default: ''
+        },
+        {
           column_name: 'description',
           type: 'jsonb',
           required: true
         },
         {
-          column_name: 'tags',
+          column_name: 'skills',
           type: 'jsonb',
           default: '[]'
         },
@@ -287,7 +317,8 @@ module.exports = {
         },
         {
           column_name: 'end_date',
-          type: 'datetime'
+          type: 'datetime',
+          required: true
         }
       ]
     }

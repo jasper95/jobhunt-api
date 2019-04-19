@@ -10,9 +10,9 @@ export default async ({ server, log }) => {
 
   return readDirPromise(dir)
     .then(files => files.sort())
-    .mapSeries((file) => {
+    .mapSeries(async (file) => {
       const { default: initializer } = require(`${dir}/${file}`) // eslint-disable-line
-      initializer(context)
+      await initializer(context)
       return null
     })
     .catch(err => log('error', util.inspect(err)))

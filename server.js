@@ -28,9 +28,9 @@ const log = (level = 'info', message, ...args) => {
 
 serviceLocator.registerService('logger', log)
 
+server.pre(requestLogger)
 server.pre(cors.preflight)
 server.use(cors.actual)
-server.use(requestLogger)
 server.use(restify.plugins.fullResponse())
 server.use(restify.plugins.acceptParser(server.acceptable))
 server.use(restify.plugins.queryParser({ mapParams: true }))

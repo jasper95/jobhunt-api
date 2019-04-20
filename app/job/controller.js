@@ -8,6 +8,10 @@ export default class JobController {
     this.Model = Model
   }
 
+  async getJobSearch({ params }) {
+    return this.Model.job.getJobSearch(params)
+  }
+
   async getJobDetails({ params }) {
     return this.Model.job.getJobDetails(params)
   }
@@ -15,5 +19,13 @@ export default class JobController {
   async createJob({ params }) {
     params.slug = `${slugify(params.name.toLowerCase())}-${shortid.generate()}`
     return this.DB.insert('tbl_Job', params)
+  }
+
+  async updateJob({ params }) {
+    const job = await this.DB.updateById('tbl_Job', params)
+    return {
+      ...params,
+      ...job
+    }
   }
 }

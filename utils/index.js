@@ -33,6 +33,12 @@ const proxyHandler = (targetValue, { prototype, target }, ...args) => {
   return targetValue.apply(target, args)
 }
 
+export const selectJsonObject = (fields, alias) => `
+  json_build_object(${fields.map(field => `'${field}', ${alias}.${field}`).join(', ')}) as ${alias}
+`
+
+export const selectFields = (fields, alias) => fields.map(field => `${alias}.${field}`)
+
 export const createProxy = (object, cb = proxyHandler) => {
   const handler = {
     get(target, prototype, receiver) {

@@ -1,6 +1,10 @@
 const routes = {
   get: [
     {
+      url: '/job/search',
+      handler: 'getJobSearch'
+    },
+    {
       url: '/job/:id',
       handler: 'getJobDetails'
     }
@@ -9,6 +13,12 @@ const routes = {
     {
       url: '/job',
       handler: 'createJob'
+    }
+  ],
+  put: [
+    {
+      url: '/job',
+      handler: 'updateJob'
     }
   ]
 }

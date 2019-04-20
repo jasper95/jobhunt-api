@@ -222,9 +222,14 @@ module.exports = {
           on_delete: 'RESTRICT'
         },
         {
-          column_name: 'name',
-          type: 'string',
-          required: true
+          column_name: 'job_category_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_JobCategory',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
         },
         {
           column_name: 'qualification',
@@ -286,6 +291,11 @@ module.exports = {
           required: true
         },
         {
+          column_name: 'address_description',
+          type: 'jsonb',
+          default: '{}'
+        },
+        {
           column_name: 'barangay',
           type: 'string',
           required: true
@@ -318,6 +328,41 @@ module.exports = {
         {
           column_name: 'end_date',
           type: 'datetime',
+          required: true
+        }
+      ]
+    },
+    {
+      table_name: 'tbl_Application',
+      columns: [
+        {
+          column_name: 'user_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_User',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'job_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_Job',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'status',
+          type: 'string',
+          default: 'pending'
+        },
+        {
+          column_name: 'pitch',
+          type: 'string',
           required: true
         }
       ]

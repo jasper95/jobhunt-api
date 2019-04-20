@@ -12,8 +12,7 @@ export default class BaseController {
 
   async getNodeDetails({ params }) {
     const { node, id } = params
-    const [data] = await this.DB.find(this.Model.base.getTable(node), id)
-    return data
+    return this.DB.find(this.Model.base.getTable(node), id)
   }
 
   async createNode({ params }) {

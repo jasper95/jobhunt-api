@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
 class AuthModel {
-  constructor({ DB, knex, Models }) {
+  constructor({ DB, knex, Model }) {
     this.DB = DB
     this.knex = knex
-    this.Models = Models
+    this.Model = Model
   }
 
   async authenticateUser(user) {

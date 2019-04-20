@@ -5,9 +5,7 @@ import {
 } from '../utils'
 
 const unprotected_routes = {
-  GET: [
-    '/job/:id'
-  ],
+  GET: [],
   POST: [
     '/signup',
     '/login'

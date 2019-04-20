@@ -35,7 +35,6 @@ export default (self) => {
     controller = createProxy(controller, proxyHandler)
     Object.entries(routes).forEach(([verb, handlers]) => {
       handlers.forEach(({ url, handler }) => {
-        console.log('url, handler: ', url, handler, verb);
         server[verb](url, controller[handler])
       })
     })

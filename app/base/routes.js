@@ -17,13 +17,13 @@ const routes = {
   ],
   put: [
     {
-      url: '/:node/:id',
+      url: '/:node',
       handler: 'updateNode'
     }
   ],
   del: [
     {
-      url: '/:node/:id',
+      url: '/:node',
       handler: 'deleteNode'
     }
   ]

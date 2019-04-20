@@ -4,9 +4,6 @@ import bootstrap from './bootstrap'
 import {
   auth, logger, cors, requestLogger
 } from './middlewares'
-import {
-  serviceLocator
-} from './utils'
 
 dotenv.config() // load env-variables
 
@@ -25,8 +22,6 @@ const server = restify.createServer({
 const log = (level = 'info', message, ...args) => {
   logger[level](message, ...args)
 }
-
-serviceLocator.registerService('logger', log)
 
 server.pre(requestLogger)
 server.pre(cors.preflight)

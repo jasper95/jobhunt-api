@@ -356,6 +356,16 @@ module.exports = {
           on_delete: 'RESTRICT'
         },
         {
+          column_name: 'company_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_Company',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
           column_name: 'status',
           type: 'string',
           default: 'pending'

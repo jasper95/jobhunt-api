@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "bluebird": "^3.5.1",
     "dotenv": "^6.0.0",
     "jsonwebtoken": "^8.3.0",

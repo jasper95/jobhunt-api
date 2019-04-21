@@ -44,7 +44,19 @@ export default class JobModel {
       .orderBy([{ column: 'job.created_date', order: 'desc' }])
   }
 
-  // async getJobList(params) {
-  //   this.knex()
-  // }
+  async getJobList(params) {
+    const { company_id } = params
+    const job_fields = ['id', 'name', 'description', 'address_description', 'slug', 'status']
+    const application = this.knex('tbl_Application as application')
+      .select('application.job_id', this.knex.raw('COUNT(application.job_id) as applicants_count'))
+      .groupBy('application.job_id')
+      .as('application')
+    return this.knex('tbl_Job as job')
+      .select(
+        ...selectFields(job_fields, 'job'),
+        'application.applicants_count'
+      )
+      .leftJoin(application, 'job.id', 'application.job_id')
+      .where({ 'job.company_id': company_id })
+  }
 }

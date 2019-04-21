@@ -37,6 +37,16 @@ module.exports = {
           index: true
         },
         {
+          column_name: 'resume',
+          type: 'string',
+          default: ''
+        },
+        {
+          column_name: 'avatar',
+          type: 'string',
+          default: ''
+        },
+        {
           column_name: 'first_name',
           type: 'string',
           // required: true,

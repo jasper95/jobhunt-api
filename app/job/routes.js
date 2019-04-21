@@ -7,6 +7,10 @@ const routes = {
     {
       url: '/job/:id',
       handler: 'getJobDetails'
+    },
+    {
+      url: '/job',
+      handler: 'getJobList'
     }
   ],
   post: [

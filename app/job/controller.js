@@ -16,6 +16,10 @@ export default class JobController {
     return this.Model.job.getJobDetails(params)
   }
 
+  async getJobList({ params }) {
+    return this.Model.job.getJobList(params)
+  }
+
   async createJob({ params }) {
     params.slug = `${slugify(params.name.toLowerCase())}-${shortid.generate()}`
     return this.DB.insert('tbl_Job', params)

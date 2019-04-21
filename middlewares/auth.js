@@ -4,10 +4,18 @@ import {
   serviceLocator
 } from '../utils'
 
-const unprotected_routes = {
+const public_routes = {
   GET: [
-    '/job/:id'
+    '/job/:id',
+    '/file/download'
   ],
+  POST: [],
+  PUT: [],
+  DELETE: []
+}
+
+const basic_auth_routes = {
+  GET: [],
   POST: [
     '/signup',
     '/login'
@@ -16,36 +24,41 @@ const unprotected_routes = {
   DELETE: []
 }
 
-export default async (req, res, next) => {
+function matchRoutes(routes, req) {
+  console.log('req.getPath()', req.getPath())
+  return routes[req.method].some(pathname => pathToRegexp(pathname).test(req.getPath()))
+}
+
+export default async function authMiddleware(req, res, next) {
   const DB = serviceLocator.get('DB')
-  let authenticated = true
-  let auth_error = ''
+  req.authenticated = true
   const { token } = req.headers
-  if (unprotected_routes[req.method].some(pathname => pathToRegexp(pathname).test(req.getPath()))) {
+  if (matchRoutes(public_routes, req)) {
+    return next()
+  }
+  if (matchRoutes(basic_auth_routes, req)) {
     if (req.username !== process.env.BASIC_USERNAME
       || req.authorization.basic.password !== process.env.BASIC_PASSWORD) {
-      auth_error = 'Invalid credentials'
-      authenticated = false
+      req.auth_error = 'Invalid credentials'
+      req.authenticated = false
     }
   } else if (token) {
     try {
       const { id } = jwt.verify(token, process.env.AUTH_SECRET)
       const [session] = await DB.filter('tbl_UserSession', { id })
       if (!session || session.status !== 'Online') {
-        auth_error = 'Invalid token'
-        authenticated = false
+        req.auth_error = 'Invalid token'
+        req.authenticated = false
       } else if (session) {
         req.session = session
       }
     } catch (err) {
-      authenticated = false
-      auth_error = err.message
+      req.authenticated = false
+      req.auth_error = err.message
     }
   } else {
-    auth_error = 'Authentication is required'
-    authenticated = false
+    req.auth_error = 'Authentication is required'
+    req.authenticated = false
   }
-  req.authenticated = authenticated
-  req.auth_error = auth_error
   return next()
 }

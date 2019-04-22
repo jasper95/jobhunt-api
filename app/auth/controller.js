@@ -4,10 +4,13 @@ import {
 } from '../../utils'
 
 export default class UserController {
-  constructor({ DB, knex, Model }) {
+  constructor({
+    DB, knex, Model, serviceLocator
+  }) {
     this.DB = DB
     this.knex = knex
     this.Model = Model
+    this.serviceLocator = serviceLocator
   }
 
   async getSession({ session }) {
@@ -35,13 +38,24 @@ export default class UserController {
     const salt = generateSalt()
     this.DB.insert('tbl_UserAuth',
       { user_id: user.id, password: generateHash(params.password, salt), salt })
+    const sendgrid = this.serviceLocator.get('sendgrid')
 
-    const token = await this.Model.auth.authenticateUser(user)
+    await sendgrid.send({
+      from: process.env.EMAIL_FROM,
+      to: user.email,
+      subject: 'Verify Account',
+      text: `Please click this link to verify your account ${process.env.PORTAL_LINK}/confirm?user_id=${user.id}`
+    })
 
     return {
-      ...user,
-      token
+      success: true
     }
+    // const token = await this.Model.auth.authenticateUser(user)
+
+    // return {
+    //   ...user,
+    //   token
+    // }
   }
 
   async login({ params }) {
@@ -49,6 +63,9 @@ export default class UserController {
     const [user] = await this.DB.filter('tbl_User', { email })
     if (!user) {
       throw { success: false, message: 'Email does not exists' }
+    }
+    if (!user.verified) {
+      throw { success: false, message: 'Please verify email to login' }
     }
     const { id } = user
     const [{ salt, password: hash_password }] = await this.DB.filter('tbl_UserAuth', { user_id: id })

@@ -20,12 +20,13 @@ const basic_auth_routes = {
     '/signup',
     '/login'
   ],
-  PUT: [],
+  PUT: [
+    '/user'
+  ],
   DELETE: []
 }
 
 function matchRoutes(routes, req) {
-  console.log('req.getPath()', req.getPath())
   return routes[req.method].some(pathname => pathToRegexp(pathname).test(req.getPath()))
 }
 

@@ -37,6 +37,11 @@ module.exports = {
           index: true
         },
         {
+          column_name: 'verified',
+          type: 'boolean',
+          default: false
+        },
+        {
           column_name: 'resume',
           type: 'string',
           default: ''

@@ -5,6 +5,7 @@ const {
 } = require('knex-wrapper')
 const knex = require('knex')
 const chalk = require('chalk')
+const util = require('util')
 const {
   seeds,
   database,

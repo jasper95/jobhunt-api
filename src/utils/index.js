@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import fs from 'fs'
 import bluebird from 'bluebird'
 import util from 'util'
+import path from 'path'
 
 export const serviceLocator = {
   services: {},
@@ -50,6 +51,17 @@ export const createProxy = (object, cb = proxyHandler) => {
     }
   }
   return new Proxy(object, handler)
+}
+
+export const formatHTML = async (template_name, content) => {
+  const readFile = Promise.promisify(fs.readFile)
+  const file_path = path.join(process.cwd(), 'resources', 'html-templates', `${template_name}.html`)
+  const html = await readFile(file_path, 'utf-8')
+  return Object.entries(content)
+    .reduce((acc, [key, value]) => {
+      acc = acc.replace(new RegExp(`\\\${\\s*${key}\\s*}`, 'g'), value)
+      return acc
+    }, html)
 }
 
 export const readDirPromise = bluebird.promisify(fs.readdir)

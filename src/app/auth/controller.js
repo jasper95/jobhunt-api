@@ -1,6 +1,7 @@
 import {
   generateHash,
-  generateSalt
+  generateSalt,
+  formatHTML
 } from '../../utils'
 
 export default class UserController {
@@ -39,23 +40,20 @@ export default class UserController {
     this.DB.insert('tbl_UserAuth',
       { user_id: user.id, password: generateHash(params.password, salt), salt })
     const sendgrid = this.serviceLocator.get('sendgrid')
-
+    const html = await formatHTML('signup', { confirm_link: `${process.env.PORTAL_LINK}/confirm?user_id=${user.id}`, name: user.first_name })
     await sendgrid.send({
-      from: process.env.EMAIL_FROM,
+      from: {
+        name: 'Internlink',
+        email: process.env.EMAIL_FROM
+      },
       to: user.email,
       subject: 'Verify Account',
-      text: `Please click this link to verify your account ${process.env.PORTAL_LINK}/confirm?user_id=${user.id}`
+      html
     })
 
     return {
       success: true
     }
-    // const token = await this.Model.auth.authenticateUser(user)
-
-    // return {
-    //   ...user,
-    //   token
-    // }
   }
 
   async login({ params }) {

@@ -40,7 +40,8 @@ export default class UserController {
     this.DB.insert('tbl_UserAuth',
       { user_id: user.id, password: generateHash(params.password, salt), salt })
     const sendgrid = this.serviceLocator.get('sendgrid')
-    const html = await formatHTML('signup', { confirm_link: `${process.env.PORTAL_LINK}/confirm?user_id=${user.id}`, name: user.first_name })
+    const name = params.role === 'ADMIN' ? params.company_name : params.first_name
+    const html = await formatHTML('signup', { confirm_link: `${process.env.PORTAL_LINK}/confirm?user_id=${user.id}`, name })
     await sendgrid.send({
       from: {
         name: 'Internlink',

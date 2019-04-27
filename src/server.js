@@ -1,5 +1,6 @@
 import restify from 'restify'
 import dotenv from 'dotenv'
+import os from 'os'
 import bootstrap from './bootstrap'
 import {
   auth, logger, cors, requestLogger
@@ -35,6 +36,6 @@ server.use(auth);
 
 (async () => {
   await bootstrap({ log, server })
-  const message = `Application starting in ${ENV} environment on http://${APP_NAME}:${PORT}`
+  const message = `Application starting in ${ENV} environment on http://${os.hostname()}:${PORT}`
   server.listen(PORT, () => logger.info(message))
 })()

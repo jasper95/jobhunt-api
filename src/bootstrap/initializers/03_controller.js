@@ -7,7 +7,7 @@ import {
 } from '../../utils'
 
 export default (self) => {
-  const app = path.join(process.cwd(), 'app')
+  const app = path.join(__dirname, '..', '..', 'app')
   const proxyHandler = (targetValue, { prototype, target }, ...args) => {
     const { log } = self
     const class_name = target.constructor.name

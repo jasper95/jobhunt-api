@@ -7,7 +7,7 @@ import {
 } from '../../utils'
 
 export default (self) => {
-  const app_path = path.join(process.cwd(), 'app')
+  const app_path = path.join(__dirname, '..', '..', 'app')
   self.Model = {}
   serviceLocator.registerService('Model', self.Model)
   const initModels = async (module_name) => {

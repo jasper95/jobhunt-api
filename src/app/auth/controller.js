@@ -17,7 +17,7 @@ export default class UserController {
     const { user_id, token } = session
     const [user] = await this.DB.filter('tbl_User', { id: user_id })
     if (user.role === 'ADMIN' && user.company_id) {
-      const company = await this.DB.find('tbl_Company', { id: user.company_id })
+      const company = await this.DB.find('tbl_Company', user.company_id)
       if (company) {
         user.company = company
       }
@@ -75,7 +75,7 @@ export default class UserController {
     }
     const token = await this.Model.auth.authenticateUser(user)
     if (user.role === 'ADMIN' && user.company_id) {
-      const company = await this.DB.find('tbl_Company', { id: user.company_id })
+      const company = await this.DB.find('tbl_Company', user.company_id)
       if (company) {
         user.company = company
       }

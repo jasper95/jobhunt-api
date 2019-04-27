@@ -15,11 +15,11 @@ const {
 global.Promise = require('bluebird')
 
 const { log } = console
-const { db_name, port, host } = database.connection
+const { database: db_name, port, host } = database.connection
 const query_wrapper = new QueryWrapper(schema, knex, database)
 const schema_builder = new SchemaBuilder(schema, query_wrapper);
 
-(async () => {
+async function start() {
   await schema_builder.setupSchema()
     .then(() => log(chalk.green(`Database schema successfully updated [Connection: ${host}:${port}, Name: ${db_name}]`)))
     .catch(err => log(chalk.red(`'Error updating up schema [Error: ${util.inspect(err)}]`)))
@@ -27,4 +27,5 @@ const schema_builder = new SchemaBuilder(schema, query_wrapper);
     .then(() => log(chalk.green(`Seed successfully updated [Tables: ${seeds.map(e => e.table_name).join(', ')}]`)))
     .catch(err => log(chalk.red(`'Error updating seeds [Error: ${util.inspect(err)}]`)))
   process.exit(0)
-})()
+}
+start()

@@ -5,14 +5,14 @@ import knex from 'knex'
 import {
   database,
   schema
-} from '../../../config'
+} from '../../config'
 import {
   createProxy,
   serviceLocator
 } from '../../utils'
 
 export default (self) => {
-  const { db_name, port, host } = database.connection
+  const { database: db_name, port, host } = database.connection
   const query_wrapper = createProxy(new QueryWrapper(schema, knex, database))
   self.DB = query_wrapper
   self.knex = query_wrapper.knex

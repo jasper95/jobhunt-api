@@ -13,7 +13,7 @@ global.Promise = require('bluebird')
 const APP_NAME = process.env.npm_package_name
 const ENV = process.env.NODE_ENV || 'default'
 
-const PORT = process.env.LISTEN_PORT || 5000
+const PORT = process.env.PORT || 5000
 
 const server = restify.createServer({
   name: APP_NAME,

@@ -1,12 +1,13 @@
 {
-  "name": "api2",
+  "name": "jobhunt-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "build": "babel src -d build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && pm2-runtime start ecosystem.config.js",
+    "start": "pm2-runtime start ecosystem.config.js",
+    "postinstall": "npm run build && npm run migrate",
     "migrate": "node scripts/migrate",
     "lint": "eslint src/"
   },

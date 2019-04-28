@@ -2,6 +2,7 @@ module.exports = {
   tables: [
     {
       table_name: 'tbl_Company',
+      slug: true,
       columns: [
         {
           column_name: 'name',
@@ -29,12 +30,18 @@ module.exports = {
     },
     {
       table_name: 'tbl_User',
+      slug: true,
       columns: [
         {
           column_name: 'email',
           type: 'string',
           required: true,
           index: true
+        },
+        {
+          column_name: 'name',
+          type: 'string',
+          required: true
         },
         {
           column_name: 'verified',
@@ -269,6 +276,7 @@ module.exports = {
     },
     {
       table_name: 'tbl_Job',
+      slug: true,
       columns: [
         {
           column_name: 'company_id',
@@ -282,11 +290,6 @@ module.exports = {
         },
         {
           column_name: 'name',
-          type: 'string',
-          required: true
-        },
-        {
-          column_name: 'slug',
           type: 'string',
           required: true
         },

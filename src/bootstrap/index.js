@@ -7,6 +7,7 @@ import {
   serviceLocator
 } from 'utils'
 
+require('dotenv').config()
 
 export default async ({ server, log }) => {
   const dir = path.join(__dirname, './initializers')

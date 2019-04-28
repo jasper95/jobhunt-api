@@ -43,6 +43,9 @@ export default class UserController {
       }
       const company = await this.DB.insert('tbl_Company', { ...params, name: params.company_name })
       params.company_id = company.id
+      params.name = company.name
+    } else {
+      params.name = `${params.first_name} ${params.last_name}`
     }
 
     const user = await this.DB.insert('tbl_User', params)

@@ -13,12 +13,6 @@ const routes = {
       handler: 'getJobList'
     }
   ],
-  post: [
-    {
-      url: '/job',
-      handler: 'createJob'
-    }
-  ],
   put: [
     {
       url: '/job',

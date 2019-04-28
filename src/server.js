@@ -1,12 +1,9 @@
 import restify from 'restify'
-import dotenv from 'dotenv'
 import os from 'os'
 import bootstrap from './bootstrap'
 import {
   auth, logger, cors, requestLogger
 } from './middlewares'
-
-dotenv.config() // load env-variables
 
 global.Promise = require('bluebird')
 

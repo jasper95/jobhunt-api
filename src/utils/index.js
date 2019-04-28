@@ -91,4 +91,7 @@ export const uploadToS3 = (buffer, file_path) => {
   })
 }
 
+export const isUuid = string => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(string)
+
+
 export const readDirPromise = bluebird.promisify(fs.readdir)

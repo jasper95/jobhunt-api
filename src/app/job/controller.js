@@ -1,6 +1,3 @@
-import shortid from 'shortid'
-import slugify from 'slugify'
-
 export default class JobController {
   constructor({ DB, knex, Model }) {
     this.DB = DB
@@ -18,11 +15,6 @@ export default class JobController {
 
   async getJobList({ params }) {
     return this.Model.job.getJobList(params)
-  }
-
-  async createJob({ params }) {
-    params.slug = `${slugify(params.name.toLowerCase())}-${shortid.generate()}`
-    return this.DB.insert('tbl_Job', params)
   }
 
   async updateJob({ params }) {

@@ -3,7 +3,6 @@ import {
   SchemaBuilder,
   QueryWrapper
 } from 'knex-wrapper'
-import knex from 'knex'
 import util from 'util'
 import {
   schema,
@@ -16,7 +15,7 @@ import {
 
 export default async function initializeDB(self) {
   const { database: db_name, port, host } = database.connection
-  const query_wrapper = createProxy(new QueryWrapper(schema, knex, database))
+  const query_wrapper = createProxy(new QueryWrapper(schema, database))
   self.DB = query_wrapper
   self.knex = query_wrapper.knex
   const schema_builder = new SchemaBuilder(schema, query_wrapper)

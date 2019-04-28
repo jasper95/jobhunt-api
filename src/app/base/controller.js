@@ -1,3 +1,5 @@
+import { isUuid } from 'utils'
+
 export default class BaseController {
   constructor({ DB, knex, Model }) {
     this.DB = DB
@@ -12,7 +14,7 @@ export default class BaseController {
 
   async getNodeDetails({ params }) {
     const { node, id } = params
-    return this.DB.find(this.Model.base.getTable(node), id)
+    return this.DB.find(this.Model.base.getTable(node), id, isUuid(id) ? 'id' : 'slug')
   }
 
   async createNode({ params }) {

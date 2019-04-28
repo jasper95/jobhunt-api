@@ -1,10 +1,11 @@
 import path from 'path'
 import util from 'util'
 import sendgrid from '@sendgrid/mail'
+import S3Client from 'aws-sdk/clients/s3'
 import {
   readDirPromise,
   serviceLocator
-} from '../utils'
+} from 'utils'
 
 
 export default async ({ server, log }) => {
@@ -14,6 +15,10 @@ export default async ({ server, log }) => {
 
   serviceLocator.registerService('sendgrid', sendgrid)
   serviceLocator.registerService('logger', log)
+  serviceLocator.registerService('s3', new S3Client({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }))
 
   const context = { server, log, serviceLocator }
   return readDirPromise(dir)

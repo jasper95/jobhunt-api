@@ -11,8 +11,8 @@ module.exports = {
         },
         {
           column_name: 'description',
-          type: 'string',
-          default: ''
+          type: 'jsonb',
+          default: '{}'
         },
         {
           column_name: 'email',

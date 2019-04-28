@@ -1,13 +1,18 @@
-import fs from 'fs'
-import fse from 'fs-extra'
 import path from 'path'
 import mime from 'mime-types'
+import {
+  uploadToS3
+} from 'utils'
 
 export default class JobController {
-  constructor({ DB, knex, Model }) {
+  constructor(dependency) {
+    const {
+      DB, knex, Model, serviceLocator
+    } = dependency
     this.DB = DB
     this.knex = knex
     this.Model = Model
+    this.serviceLocator = serviceLocator
   }
 
   async downloadFile({ params }, res) {
@@ -19,15 +24,16 @@ export default class JobController {
       throw { status: 404 }
     }
     const filename = record[type]
-    const file_path = path.join(process.env.MOUNT, node, id, type, filename)
-    if (!fs.existsSync(file_path)) {
-      throw { status: 404 }
-    }
+    const file_path = path.join(node, id, type, filename)
+    const s3 = this.serviceLocator.get('s3')
     if (attachment) {
       res.header('Content-disposition', `attachment; filename=${filename}`)
     }
     res.header('Content-Type', mime.lookup(filename))
-    const stream = fs.createReadStream(file_path)
+    const stream = s3.getObject({
+      Bucket: process.env.AWS_BUCKET,
+      Key: file_path
+    }).createReadStream()
     stream.on('error', () => {
       res.writeHead(404);
       res.end();
@@ -39,17 +45,14 @@ export default class JobController {
     const {
       node, id, base64string, filename, type
     } = params
-    const writeFile = Promise.promisify(fs.writeFile)
-    const file_path = path.join(process.env.MOUNT, node, id, type)
-    await fse.ensureDir(file_path)
-    await writeFile(
-      path.join(file_path, filename),
-      Buffer.from(base64string.split(';').pop().replace('base64,', ''), 'base64')
+    const file_path = path.join(node, id, type, filename)
+    await uploadToS3(
+      Buffer.from(base64string.split(';').pop().replace('base64,', ''), 'base64'),
+      file_path
     )
-    await this.DB.updateById(
+    return this.DB.updateById(
       this.Model.base.getTable(node),
       { id, [type]: filename }
     )
-    return { success: true }
   }
 }

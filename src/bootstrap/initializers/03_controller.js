@@ -4,9 +4,9 @@ import { omit } from 'lodash'
 import {
   createProxy,
   readDirPromise
-} from '../../utils'
+} from 'utils'
 
-export default (self) => {
+export default function initializeControllers(self) {
   const app = path.join(__dirname, '..', '..', 'app')
   const proxyHandler = (targetValue, { prototype, target }, ...args) => {
     const { log } = self

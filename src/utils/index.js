@@ -34,9 +34,17 @@ const proxyHandler = (targetValue, { prototype, target }, ...args) => {
   return targetValue.apply(target, args)
 }
 
-export const selectJsonObject = (fields, alias) => `
-  json_build_object(${fields.map(field => `'${field}', ${alias}.${field}`).join(', ')}) as ${alias}
-`
+export const selectJsonObject = (fields, alias) => {
+  const object = `json_build_object(${fields.map(field => `'${field}', ${alias}.${field}`).join(', ')})`
+  return `${object} as ${alias}`
+}
+
+export const selectJsonArray = (fields, alias, join_column, result_alias) => {
+  const object = `json_build_object(${fields.map(field => `'${field}', ${alias}.${field}`).join(', ')})`
+  const array = `json_agg(${object})`
+  const filtered_array = `COALESCE(${array} FILTER (WHERE ${alias}.${join_column} IS NOT NULL), '[]')`
+  return `${filtered_array} as ${result_alias}`
+}
 
 export const selectFields = (fields, alias) => fields.map(field => `${alias}.${field}`)
 
@@ -62,6 +70,25 @@ export const formatHTML = async (template_name, content) => {
       acc = acc.replace(new RegExp(`\\\${\\s*${key}\\s*}`, 'g'), value)
       return acc
     }, html)
+}
+
+export const uploadToS3 = (buffer, file_path) => {
+  const s3 = serviceLocator.get('s3')
+  const log = serviceLocator.get('logger')
+  const bucket = process.env.AWS_BUCKET
+  log('info', 'Uploading File to s3 [bucket: %s, path: %s]', bucket, file_path)
+  return new Promise((resolve, reject) => {
+    s3.upload({
+      Bucket: bucket,
+      Key: file_path,
+      Body: buffer
+    }, (err, response) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(response)
+    })
+  })
 }
 
 export const readDirPromise = bluebird.promisify(fs.readdir)

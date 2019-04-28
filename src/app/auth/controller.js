@@ -30,7 +30,17 @@ export default class UserController {
   }
 
   async signup({ params }) {
+    // validate email
+    const [user_exists] = await this.Model.base.validateUnique('tbl_User', { email: params.email })
+    if (user_exists) {
+      throw { success: false, message: 'Email already taken.' }
+    }
+
     if (params.role === 'ADMIN') {
+      const [company_exists] = await this.Model.base.validateUnique('tbl_Company', { name: params.company_name })
+      if (company_exists) {
+        throw { success: false, message: 'Company name already taken' }
+      }
       const company = await this.DB.insert('tbl_Company', { ...params, name: params.company_name })
       params.company_id = company.id
     }

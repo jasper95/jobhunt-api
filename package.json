@@ -9,7 +9,7 @@
     "dev": "pm2 start --interpreter babel-node src/server.js --watch src --no-daemon",
     "start": "pm2-runtime start ecosystem.config.js",
     "postinstall": "npm run build && npm run migrate",
-    "migrate": "node build/scripts/migrate",
+    "migrate": "node scripts/migrate",
     "lint": "eslint src/"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
+    "aws-sdk": "^2.444.0",
     "bluebird": "^3.5.1",
     "chalk": "^2.4.2",
     "dotenv": "^6.0.0",
@@ -45,6 +46,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "@babel/register": "^7.4.4",
+    "babel-plugin-module-resolver": "^3.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0"

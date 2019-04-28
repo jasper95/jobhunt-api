@@ -5,7 +5,7 @@ export default class JobController {
     this.Model = Model
   }
 
-  async getApplicantSuggestion({ params }) {
-    return this.Model.user.getApplicantSuggestion(params)
+  async getApplicantSuggestion({ user }) {
+    return this.Model.user.getApplicantSuggestion(user)
   }
 }

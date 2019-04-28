@@ -4,9 +4,9 @@ import {
   createProxy,
   readDirPromise,
   serviceLocator
-} from '../../utils'
+} from 'utils'
 
-export default (self) => {
+export default async function initializeModels(self) {
   const app_path = path.join(__dirname, '..', '..', 'app')
   self.Model = {}
   serviceLocator.registerService('Model', self.Model)

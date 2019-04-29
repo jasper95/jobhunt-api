@@ -3,6 +3,8 @@ import fs from 'fs'
 import bluebird from 'bluebird'
 import util from 'util'
 import path from 'path'
+import shortid from 'shortid'
+import slugify from 'slugify'
 
 export const serviceLocator = {
   services: {},
@@ -90,6 +92,11 @@ export const uploadToS3 = (buffer, file_path) => {
     })
   })
 }
+
+export const generateSlug = (...args) => slugify([
+  ...args,
+  Math.floor(Math.random() * 90000) + 10000
+].join(' ')).toLowerCase()
 
 export const isUuid = string => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(string)
 

@@ -30,7 +30,6 @@ module.exports = {
     },
     {
       table_name: 'tbl_User',
-      slug: true,
       columns: [
         {
           column_name: 'email',
@@ -39,9 +38,11 @@ module.exports = {
           index: true
         },
         {
-          column_name: 'name',
+          column_name: 'slug',
           type: 'string',
-          required: true
+          required: true,
+          unique: true,
+          index: true
         },
         {
           column_name: 'verified',

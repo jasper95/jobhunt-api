@@ -14,7 +14,11 @@ export default class BaseController {
 
   async getNodeDetails({ params }) {
     const { node, id } = params
-    return this.DB.find(this.Model.base.getTable(node), id, isUuid(id) ? 'id' : 'slug')
+    const record = await this.DB.find(this.Model.base.getTable(node), id, [], isUuid(id) ? 'id' : 'slug')
+    if (!record) {
+      throw { status: 404 }
+    }
+    return record
   }
 
   async createNode({ params }) {

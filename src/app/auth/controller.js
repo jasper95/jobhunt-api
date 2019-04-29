@@ -1,8 +1,10 @@
+import shortid from 'shortid'
 import {
   generateHash,
   generateSalt,
-  formatHTML
-} from '../../utils'
+  formatHTML,
+  generateSlug
+} from 'utils'
 
 export default class UserController {
   constructor({
@@ -43,9 +45,9 @@ export default class UserController {
       }
       const company = await this.DB.insert('tbl_Company', { ...params, name: params.company_name })
       params.company_id = company.id
-      params.name = company.name
+      params.slug = generateSlug(company.name)
     } else {
-      params.name = `${params.first_name} ${params.last_name}`
+      params.slug = generateSlug(params.first_name, params.last_name)
     }
 
     const user = await this.DB.insert('tbl_User', params)

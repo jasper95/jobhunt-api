@@ -7,6 +7,7 @@
     "build": "babel src -d build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pm2 start --interpreter babel-node src/server.js --watch src --no-daemon",
+    "postinstall": "npm run build",
     "start": "pm2-runtime start ecosystem.config.js",
     "lint": "eslint src/"
   },

@@ -11,6 +11,12 @@ module.exports = {
           required: true
         },
         {
+          column_name: 'avatar',
+          type: 'string',
+          required: true,
+          default: ''
+        },
+        {
           column_name: 'description',
           type: 'jsonb',
           default: '{}'

@@ -1,4 +1,4 @@
-import { selectJsonObject, selectFields } from '../../utils'
+import { selectJsonObject, selectFields, whereAnd } from '../../utils'
 
 export default class JobModel {
   constructor({ DB, knex }) {
@@ -29,10 +29,16 @@ export default class JobModel {
   }
 
   async getJobSearch(params) {
+    const { keyword, province } = params
     const job_fields = ['id', 'name', 'description', 'address_description', 'slug']
     const company_fields = ['id', 'name']
     const category_fields = ['id', 'name']
-    return this.knex
+    const filters = [
+      keyword && { type: 'raw', value: this.knex.raw('LOWER(job.name) LIKE ?', `%${keyword.toLowerCase()}%`) },
+      province && { key: 'job.province', op: '=', value: province }
+    ].filter(Boolean)
+
+    let query = this.knex
       .select(
         ...selectFields(job_fields, 'job'),
         this.knex.raw(selectJsonObject(company_fields, 'company')),
@@ -41,7 +47,13 @@ export default class JobModel {
       .from('tbl_Job as job', 'tbl_Company as company')
       .leftJoin('tbl_Company as company', 'job.company_id', 'company.id')
       .leftJoin('tbl_JobCategory as category', 'job.job_category_id', 'category.id')
-      .orderBy([{ column: 'job.created_date', order: 'desc' }])
+
+    if (filters.length) {
+      query = query.where((builder) => {
+        whereAnd(builder, filters)
+      })
+    }
+    return query.orderBy([{ column: 'job.created_date', order: 'desc' }])
   }
 
   async getJobList(params) {

@@ -7,19 +7,24 @@ export default class UserModel {
   }
 
   async getApplicantSuggestion(params) {
-    console.log('params: ', params);
-    const { company_id } = params
-    const postings = await this.DB
-      .filter('tbl_Job', { company_id }, ['job_category_id', 'skills'])
-      .reduce((acc, el) => {
-        acc.categories = [...acc.categories, el.job_category_id]
-        acc.skills = [...acc.skills, ...el.skills.map(e => e.toLowerCase())]
-        return acc
-      }, { categories: [], skills: [] })
-    const users_with_skill = await this.knex('tbl_Skill')
-      .select('user_id')
-      .whereIn(this.knex.raw('LOWER("name")'), postings.skills)
-      .map(e => e.user_id)
+    const { company_id, job_category_id, province } = params
+    let postings = { categories: [], skills: [] }
+    let users_with_skill = []
+    if (!job_category_id) {
+      postings = await this.DB
+        .filter('tbl_Job', { company_id }, ['job_category_id', 'skills'])
+        .reduce((acc, el) => {
+          acc.categories = [...acc.categories, el.job_category_id]
+          acc.skills = [...acc.skills, ...el.skills.map(e => e.toLowerCase())]
+          return acc
+        }, postings)
+      users_with_skill = await this.knex('tbl_Skill')
+        .select('user_id')
+        .whereIn(this.knex.raw('LOWER("name")'), postings.skills)
+        .map(e => e.user_id)
+    } else {
+      postings.categories = [job_category_id]
+    }
 
     const users_with_education = await this.knex('tbl_Education')
       .select('user_id')
@@ -32,10 +37,10 @@ export default class UserModel {
       .orderBy('education.end_date', 'desc')
       .as('education_category')
 
-    return this.knex
+    let query = this.knex
       .select(
         ...selectFields(
-          ['id', 'first_name', 'last_name', 'address', 'contact_number', 'birth_date'],
+          ['id', 'first_name', 'last_name', 'address_description', 'contact_number', 'birth_date'],
           'user'
         ),
         this.knex.raw(selectJsonArray(['name', 'id'], 'skill', 'user_id', 'skills')),
@@ -51,6 +56,12 @@ export default class UserModel {
       .leftJoin('tbl_Skill as skill', 'user.id', 'skill.user_id')
       .leftJoin('tbl_Experience as experience', 'user.id', 'experience.user_id')
       .leftJoin(education_category, 'user.id', 'education_category.user_id')
+
+    if (province) {
+      query = query.where({ 'user.province': province })
+    }
+
+    return query
       .whereIn('user.id', users_with_skill.concat(users_with_education))
       .groupBy('user.id')
   }

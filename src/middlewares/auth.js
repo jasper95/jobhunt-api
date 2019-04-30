@@ -7,6 +7,7 @@ import {
 const public_routes = {
   GET: [
     '/job/:id',
+    '/job_category',
     '/file/download'
   ],
   POST: [],

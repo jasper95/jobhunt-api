@@ -13,7 +13,6 @@ module.exports = {
         {
           column_name: 'avatar',
           type: 'string',
-          required: true,
           default: ''
         },
         {
@@ -49,6 +48,23 @@ module.exports = {
           required: true,
           unique: true,
           index: true
+        },
+        {
+          column_name: 'province',
+          type: 'string'
+        },
+        {
+          column_name: 'municipality',
+          type: 'string'
+        },
+        {
+          column_name: 'address_description',
+          type: 'jsonb',
+          default: '{}'
+        },
+        {
+          column_name: 'barangay',
+          type: 'string'
         },
         {
           column_name: 'verified',

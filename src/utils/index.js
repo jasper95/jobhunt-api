@@ -100,5 +100,19 @@ export const generateSlug = (...args) => slugify([
 
 export const isUuid = string => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(string)
 
+export const whereAnd = (query, filters) => {
+  const [first, ...rest] = filters
+  const transformArgs = (filter) => {
+    if (filter.type === 'raw') {
+      return [filter.value]
+    }
+    return [filter.key, filter.op, filter.value]
+  }
+  return rest
+    .reduce((q, el) => {
+      q = q.andWhere(...transformArgs(el))
+      return q
+    }, query.where(...transformArgs(first)))
+}
 
 export const readDirPromise = bluebird.promisify(fs.readdir)

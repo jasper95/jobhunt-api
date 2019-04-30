@@ -1,3 +1,5 @@
+import pick from 'lodash/pick'
+
 export default class JobController {
   constructor({ DB, knex, Model }) {
     this.DB = DB
@@ -5,7 +7,11 @@ export default class JobController {
     this.Model = Model
   }
 
-  async getApplicantSuggestion({ user }) {
-    return this.Model.user.getApplicantSuggestion(user)
+  async getApplicantSuggestion({ user, params }) {
+    return this.Model.user
+      .getApplicantSuggestion({
+        ...pick(user, 'company_id'),
+        ...pick(params, 'job_category_id', 'province')
+      })
   }
 }

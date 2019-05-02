@@ -3,6 +3,10 @@ const routes = {
     {
       url: '/user/applicant/suggestion',
       handler: 'getApplicantSuggestion'
+    },
+    {
+      url: '/user/notification',
+      handler: 'getUserNotification'
     }
   ]
 }

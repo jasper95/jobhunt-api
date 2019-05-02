@@ -14,4 +14,13 @@ export default class JobController {
         ...pick(params, 'job_category_id', 'province')
       })
   }
+
+  async getUserNotification({ user, params }) {
+    const filters = { user_id: user.id }
+    if (params.new) {
+      filters.status = 'unread'
+    }
+    return this
+      .DB.filter('tbl_Notification', filters)
+  }
 }

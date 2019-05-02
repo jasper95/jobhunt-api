@@ -417,6 +417,31 @@ module.exports = {
           required: true
         }
       ]
+    },
+    {
+      table_name: 'tbl_Notification',
+      columns: [
+        {
+          column_name: 'user_id',
+          type: 'uuid',
+          foreign_key: true,
+          required: true,
+          reference_table: 'tbl_User',
+          reference_column: 'id',
+          on_update: 'CASCADE',
+          on_delete: 'RESTRICT'
+        },
+        {
+          column_name: 'body',
+          type: 'jsonb',
+          default: '{}'
+        },
+        {
+          column_name: 'status',
+          type: 'string',
+          required: true
+        }
+      ]
     }
   ]
 }

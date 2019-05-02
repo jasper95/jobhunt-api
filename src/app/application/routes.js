@@ -5,6 +5,12 @@ const routes = {
       handler: 'getApplicationList'
     }
   ],
+  post: [
+    {
+      url: '/application',
+      handler: 'createApplication'
+    }
+  ],
   put: [
     {
       url: '/application',

@@ -56,4 +56,21 @@ export default class ApplicationModel {
       )
       .where({ 'application.user_id': user_id })
   }
+
+  getApplicationResponse({ status, job, company }) {
+    switch (status) {
+      case 'accepted':
+        return `
+        Congratulations!
+          You have been invited for interview by ${company.name} for your application as ${job.name} in the company.
+          For details, please send an email to ${company.email} for further details of your interview.
+        `
+      case 'rejected':
+        return `
+          We are sorry to inform you that ${company.name} has rejected your application as ${job.name} in their company.
+        `
+      default:
+        return ''
+    }
+  }
 }

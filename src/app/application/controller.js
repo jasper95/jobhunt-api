@@ -21,8 +21,8 @@ export default class ApplicationController {
     const sendgrid = this.serviceLocator.get('sendgrid')
     const response = await this.DB.insert('tbl_Application', params)
     const [job, company] = await Promise.all([
-      this.DB.find('tbl_Job', job_id, ['name', 'slug', 'email']),
-      this.DB.find('tbl_Company', company_id, ['name'])
+      this.DB.find('tbl_Job', job_id, ['name', 'slug']),
+      this.DB.find('tbl_Company', company_id, ['name', 'email'])
     ])
     const html = await formatHTML(
       'company-application',

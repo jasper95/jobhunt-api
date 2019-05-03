@@ -13,6 +13,22 @@ class AuthModel {
       expiresIn: process.env.AUTH_VALIDITY
     })
   }
+
+  async getUserData(user) {
+    if (user.role === 'ADMIN' && user.company_id) {
+      const company = await this.DB.find('tbl_Company', user.company_id)
+      if (company) {
+        user.company = company
+      }
+    }
+    const { id } = user
+    user.unread_notifications = await this.knex('tbl_Notification')
+      .where({ user_id: id, status: 'unread' })
+      .count()
+      .first()
+      .then(e => e.count)
+    return user
+  }
 }
 
 export default AuthModel

@@ -15,12 +15,17 @@ export default class JobController {
       })
   }
 
-  async getUserNotification({ user, params }) {
+  async getUserNotification({ user }) {
     const filters = { user_id: user.id }
-    if (params.new) {
-      filters.status = 'unread'
-    }
-    return this
-      .DB.filter('tbl_Notification', filters)
+    const response = await this.DB.filter(
+      'tbl_Notification',
+      filters, [], [{ column: 'created_date', direction: 'asc' }]
+    )
+    this.DB.updateByFilter(
+      'tbl_Notification',
+      { status: 'read' },
+      { user_id: user.id, status: 'unread' }
+    )
+    return response
   }
 }

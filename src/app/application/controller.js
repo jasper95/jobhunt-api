@@ -1,5 +1,5 @@
 import { formatHTML } from 'utils'
-import capitalize from 'lodash/capitalize'
+import { startCase, toLower } from 'lodash'
 
 export default class ApplicationController {
   constructor(context) {
@@ -20,9 +20,10 @@ export default class ApplicationController {
     const { company_id, job_id } = params
     const sendgrid = this.serviceLocator.get('sendgrid')
     const response = await this.DB.insert('tbl_Application', params)
-    const [job, company] = await Promise.all([
+    const [job, company, admin] = await Promise.all([
       this.DB.find('tbl_Job', job_id, ['name', 'slug']),
-      this.DB.find('tbl_Company', company_id, ['name', 'email'])
+      this.DB.find('tbl_Company', company_id, ['name', 'email']),
+      this.DB.find('tbl_User', company_id, [], 'company_id')
     ])
     const html = await formatHTML(
       'company-application',
@@ -32,6 +33,15 @@ export default class ApplicationController {
         company_name: company.name
       }
     )
+    await this.DB.insert('tbl_Notification', {
+      body: {
+        message: `New Application received for ${startCase(toLower(`${job.name}`))}`,
+        icon: 'info',
+        type: 'success'
+      },
+      user_id: admin.id,
+      status: 'unread'
+    })
     await sendgrid.send({
       from: {
         name: 'Internlink',
@@ -57,8 +67,9 @@ export default class ApplicationController {
       ])
       await this.DB.insert('tbl_Notification', {
         body: {
-          message: `You application has been ${capitalize(status)}`,
-          icon: status === 'accepted' ? 'thumb_up' : 'thumb_down'
+          message: `${startCase(toLower(company.name))} ${status} your application`,
+          icon: status === 'accepted' ? 'thumb_up' : 'thumb_down',
+          type: status === 'accepted' ? 'success' : 'warning'
         },
         user_id,
         status: 'unread'

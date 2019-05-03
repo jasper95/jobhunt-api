@@ -89,6 +89,44 @@ export default class UserController {
     }
   }
 
+  async forgotPassword({ params }) {
+    const { email } = params
+    const user = await this.DB.find('tbl_User', email, [], 'email')
+    if (!user) {
+      throw { success: false, message: 'Email does not exists' }
+    }
+    if (user.role === 'ADMIN') {
+      const { name } = await this.DB.find('tbl_Company', user.company_id)
+      user.first_name = name
+    }
+    const html = await formatHTML(
+      'reset-password',
+      { reset_link: `${process.env.PORTAL_LINK}/reset-password?user_id=${user.id}`, name: user.first_name }
+    )
+    const sendgrid = this.serviceLocator.get('sendgrid')
+    await sendgrid.send({
+      from: {
+        name: 'Internlink',
+        email: process.env.EMAIL_FROM
+      },
+      to: email,
+      subject: 'Reset Password',
+      html
+    })
+    return { success: true }
+  }
+
+  async resetPassword({ params }) {
+    const { user_id, password } = params
+    const salt = generateSalt()
+    await this.DB.updateByFilter(
+      'tbl_UserAuth',
+      { user_id, password: generateHash(password, salt), salt },
+      { user_id }
+    )
+    return { success: true }
+  }
+
   async logout({ session }) {
     return this.DB.deleteById('tbl_UserSession', { id: session.id })
   }

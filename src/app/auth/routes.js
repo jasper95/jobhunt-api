@@ -15,11 +15,20 @@ const routes = {
       handler: 'login'
     },
     {
+      url: '/forgot-password',
+      handler: 'forgotPassword'
+    },
+    {
       url: '/logout',
       handler: 'logout'
     }
   ],
-  put: [],
+  put: [
+    {
+      url: '/reset-password',
+      handler: 'resetPassword'
+    }
+  ],
   del: []
 }
 export default routes

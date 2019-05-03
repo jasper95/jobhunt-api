@@ -19,10 +19,12 @@ const basic_auth_routes = {
   GET: [],
   POST: [
     '/signup',
-    '/login'
+    '/login',
+    '/forgot-password'
   ],
   PUT: [
-    '/user'
+    '/user',
+    '/reset-password'
   ],
   DELETE: []
 }

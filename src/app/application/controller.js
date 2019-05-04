@@ -48,7 +48,7 @@ export default class ApplicationController {
         email: process.env.EMAIL_FROM
       },
       to: company.email,
-      subject: 'Application Received',
+      subject: 'Internlink - New Application Received',
       html
     })
     return response
@@ -89,7 +89,7 @@ export default class ApplicationController {
           email: process.env.EMAIL_FROM
         },
         to: user.email,
-        subject: 'Application Status',
+        subject: 'Internlink - Application Status',
         html
       })
     }

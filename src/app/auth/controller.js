@@ -57,7 +57,7 @@ export default class UserController {
         email: process.env.EMAIL_FROM
       },
       to: user.email,
-      subject: 'Verify Account',
+      subject: 'Verify Internlink Account',
       html
     })
 
@@ -110,7 +110,7 @@ export default class UserController {
         email: process.env.EMAIL_FROM
       },
       to: email,
-      subject: 'Reset Password',
+      subject: 'Reset Internlink Account Password',
       html
     })
     return { success: true }

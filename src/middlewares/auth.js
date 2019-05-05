@@ -6,8 +6,6 @@ import {
 
 const public_routes = {
   GET: [
-    '/job/:id',
-    '/job_category',
     '/file/download'
   ],
   POST: [],
@@ -16,7 +14,11 @@ const public_routes = {
 }
 
 const basic_auth_routes = {
-  GET: [],
+  GET: [
+    '/job/:id',
+    '/job_category',
+    '/company/:id'
+  ],
   POST: [
     '/signup',
     '/login',

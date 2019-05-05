@@ -13,7 +13,7 @@ export default class JobModel {
     const job = await this.knex
       .select(
         'job.*',
-        this.knex.raw(selectJsonObject(['id', 'name'], 'company')),
+        this.knex.raw(selectJsonObject(['id', 'name', 'slug'], 'company')),
       )
       .from('tbl_Job as job', 'tbl_Company as company')
       .leftJoin('tbl_Company as company', 'job.company_id', 'company.id')
@@ -31,7 +31,7 @@ export default class JobModel {
   async getJobSearch(params) {
     const { keyword, province } = params
     const job_fields = ['id', 'name', 'description', 'address_description', 'slug']
-    const company_fields = ['id', 'name']
+    const company_fields = ['id', 'name', 'slug']
     const category_fields = ['id', 'name']
     const filters = [
       keyword && { type: 'raw', value: this.knex.raw('LOWER(job.name) LIKE ?', `%${keyword.toLowerCase()}%`) },

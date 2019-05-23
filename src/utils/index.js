@@ -3,7 +3,6 @@ import fs from 'fs'
 import bluebird from 'bluebird'
 import util from 'util'
 import path from 'path'
-import shortid from 'shortid'
 import slugify from 'slugify'
 
 export const serviceLocator = {

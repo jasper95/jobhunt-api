@@ -17,7 +17,7 @@ export default class UserController {
 
   async getSession({ session }) {
     const { user_id, token } = session
-    let [user] = await this.DB.filter('tbl_User', { id: user_id })
+    let [user] = await this.DB.filter('system_user', { id: user_id })
     user = await this.Model.auth.getUserData(user)
     return {
       ...user,
@@ -27,26 +27,26 @@ export default class UserController {
 
   async signup({ params }) {
     // validate email
-    const [user_exists] = await this.Model.base.validateUnique('tbl_User', { email: params.email })
+    const [user_exists] = await this.Model.base.validateUnique('system_user', { email: params.email })
     if (user_exists) {
       throw { success: false, message: 'Email already taken.' }
     }
 
     if (params.role === 'ADMIN') {
-      const [company_exists] = await this.Model.base.validateUnique('tbl_Company', { name: params.company_name })
+      const [company_exists] = await this.Model.base.validateUnique('company', { name: params.company_name })
       if (company_exists) {
         throw { success: false, message: 'Company name already taken' }
       }
-      const company = await this.DB.insert('tbl_Company', { ...params, name: params.company_name })
+      const company = await this.DB.insert('company', { ...params, name: params.company_name })
       params.company_id = company.id
       params.slug = generateSlug(company.name)
     } else {
       params.slug = generateSlug(params.first_name, params.last_name)
     }
 
-    const user = await this.DB.insert('tbl_User', params)
+    const user = await this.DB.insert('system_user', params)
     const salt = generateSalt()
-    this.DB.insert('tbl_UserAuth',
+    this.DB.insert('user_auth',
       { user_id: user.id, password: generateHash(params.password, salt), salt })
     const sendgrid = this.serviceLocator.get('sendgrid')
     const name = params.role === 'ADMIN' ? params.company_name : params.first_name
@@ -68,7 +68,7 @@ export default class UserController {
 
   async login({ params }) {
     const { email, password } = params
-    let [user] = await this.DB.filter('tbl_User', { email })
+    let [user] = await this.DB.filter('system_user', { email })
     if (!user) {
       throw { success: false, message: 'Email does not exists' }
     }
@@ -76,7 +76,7 @@ export default class UserController {
       throw { success: false, message: 'Please verify email to login' }
     }
     const { id } = user
-    const [{ salt, password: hash_password }] = await this.DB.filter('tbl_UserAuth', { user_id: id })
+    const [{ salt, password: hash_password }] = await this.DB.filter('user_auth', { user_id: id })
     const hash = generateHash(password, salt)
     if (hash !== hash_password) {
       throw { success: false, message: 'Incorrect Password' }
@@ -91,12 +91,12 @@ export default class UserController {
 
   async forgotPassword({ params }) {
     const { email } = params
-    const user = await this.DB.find('tbl_User', email, [], 'email')
+    const user = await this.DB.find('system_user', email, [], 'email')
     if (!user) {
       throw { success: false, message: 'Email does not exists' }
     }
     if (user.role === 'ADMIN') {
-      const { name } = await this.DB.find('tbl_Company', user.company_id)
+      const { name } = await this.DB.find('company', user.company_id)
       user.first_name = name
     }
     const html = await formatHTML(
@@ -120,7 +120,7 @@ export default class UserController {
     const { user_id, password } = params
     const salt = generateSalt()
     await this.DB.updateByFilter(
-      'tbl_UserAuth',
+      'user_auth',
       { user_id, password: generateHash(password, salt), salt },
       { user_id }
     )
@@ -128,6 +128,6 @@ export default class UserController {
   }
 
   async logout({ session }) {
-    return this.DB.deleteById('tbl_UserSession', { id: session.id })
+    return this.DB.deleteById('user_session', { id: session.id })
   }
 }

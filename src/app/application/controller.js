@@ -19,11 +19,11 @@ export default class ApplicationController {
   async createApplication({ params }) {
     const { company_id, job_id } = params
     const sendgrid = this.serviceLocator.get('sendgrid')
-    const response = await this.DB.insert('tbl_Application', params)
+    const response = await this.DB.insert('application', params)
     const [job, company, admin] = await Promise.all([
-      this.DB.find('tbl_Job', job_id, ['name', 'slug']),
-      this.DB.find('tbl_Company', company_id, ['name', 'email']),
-      this.DB.find('tbl_User', company_id, [], 'company_id')
+      this.DB.find('job', job_id, ['name', 'slug']),
+      this.DB.find('company', company_id, ['name', 'email']),
+      this.DB.find('system_user', company_id, [], 'company_id')
     ])
     const html = await formatHTML(
       'company-application',
@@ -33,7 +33,7 @@ export default class ApplicationController {
         company_name: company.name
       }
     )
-    await this.DB.insert('tbl_Notification', {
+    await this.DB.insert('notification', {
       body: {
         message: `New Application received for ${startCase(toLower(`${job.name}`))}`,
         icon: 'info',
@@ -55,17 +55,17 @@ export default class ApplicationController {
   }
 
   async updateApplication({ params }) {
-    const response = await this.DB.updateById('tbl_Application', params)
+    const response = await this.DB.updateById('application', params)
     const { status } = params
     if (['accepted', 'rejected'].includes(status)) {
       const sendgrid = this.serviceLocator.get('sendgrid')
       const { user_id, company_id, job_id } = response
       const [user, company, job] = await Promise.all([
-        this.DB.find('tbl_User', user_id, ['email', 'first_name']),
-        this.DB.find('tbl_Company', company_id, ['name']),
-        this.DB.find('tbl_Job', job_id, ['name'])
+        this.DB.find('system_user', user_id, ['email', 'first_name']),
+        this.DB.find('company', company_id, ['name']),
+        this.DB.find('job', job_id, ['name'])
       ])
-      await this.DB.insert('tbl_Notification', {
+      await this.DB.insert('notification', {
         body: {
           message: `${startCase(toLower(company.name))} ${status} your application`,
           icon: status === 'accepted' ? 'thumb_up' : 'thumb_down',

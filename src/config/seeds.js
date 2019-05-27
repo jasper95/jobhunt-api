@@ -1,6 +1,6 @@
 module.exports = [
   {
-    table_name: 'tbl_JobCategory',
+    table_name: 'job_category',
     data: [{
       name: 'Accounting / Finance',
       id: 'd53cce07-efd7-4be0-b0e5-65fbe3294806'
@@ -34,6 +34,6 @@ module.exports = [
     }, {
       name: 'Telecommunication',
       id: '3f5ac87a-7f15-48ad-9927-e826347c55d3'
-    }],
+    }]
   }
 ]

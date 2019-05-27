@@ -19,7 +19,7 @@ export default class JobController {
     const {
       node, id, type, attachment
     } = params
-    const record = await this.DB.find(this.Model.base.getTable(node), id)
+    const record = await this.DB.find(node, id)
     if (!record || !record[type]) {
       throw { status: 404 }
     }
@@ -51,7 +51,7 @@ export default class JobController {
       file_path
     )
     return this.DB.updateById(
-      this.Model.base.getTable(node),
+      node,
       { id, [type]: filename }
     )
   }

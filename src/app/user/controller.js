@@ -18,11 +18,11 @@ export default class JobController {
   async getUserNotification({ user }) {
     const filters = { user_id: user.id }
     const response = await this.DB.filter(
-      'tbl_Notification',
+      'notification',
       filters, [], [{ column: 'created_date', direction: 'asc' }]
     )
     this.DB.updateByFilter(
-      'tbl_Notification',
+      'notification',
       { status: 'read' },
       { user_id: user.id, status: 'unread' }
     )

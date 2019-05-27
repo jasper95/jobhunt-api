@@ -8,11 +8,11 @@ export default class ApplicationModel {
     const { company_id, user_id } = params
     const job_with_category = this.knex
       .select('job.id as job_id', 'category.name as job_category', 'job.name as job_name', 'job.address_description as job_address')
-      .from('tbl_Job as job')
-      .leftJoin('tbl_JobCategory as category', 'job.job_category_id', 'category.id')
+      .from('job as job')
+      .leftJoin('job_category as category', 'job.job_category_id', 'category.id')
       .as('job_with_category')
     if (company_id) {
-      const user = this.knex('tbl_User as user')
+      const user = this.knex('system_user as user')
         .select(
           this.knex.raw(
             'array_to_string(ARRAY[??, ??], \' \') as applicant_name',
@@ -21,11 +21,11 @@ export default class ApplicationModel {
           'education.school as applicant_school',
           'user.id as user_id'
         )
-        .leftJoin('tbl_Education as education', 'user.id', 'education.user_id')
+        .leftJoin('education', 'user.id', 'education.user_id')
         .orderBy([{ column: 'education.created_date', order: 'desc' }])
         .as('user')
 
-      return this.knex('tbl_Application as application')
+      return this.knex('application')
         .select(
           'application.id as id',
           'application.status as status',
@@ -40,7 +40,7 @@ export default class ApplicationModel {
         )
         .where({ 'application.company_id': company_id })
     }
-    return this.knex('tbl_Application as application')
+    return this.knex('application')
       .select(
         'application.id as id',
         'application.status as status',
@@ -48,7 +48,7 @@ export default class ApplicationModel {
         'application.created_date as date_applied',
         'company.name as company_name'
       )
-      .leftJoin('tbl_Company as company', 'application.company_id', 'company.id')
+      .leftJoin('company', 'application.company_id', 'company.id')
       .leftJoin(
         job_with_category,
         'application.job_id',

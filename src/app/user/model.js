@@ -12,13 +12,13 @@ export default class UserModel {
     let users_with_skill = []
     if (!job_category_id) {
       postings = await this.DB
-        .filter('tbl_Job', { company_id }, ['job_category_id', 'skills'])
+        .filter('job', { company_id }, ['job_category_id', 'skills'])
         .reduce((acc, el) => {
           acc.categories = [...acc.categories, el.job_category_id]
           acc.skills = [...acc.skills, ...el.skills.map(e => e.toLowerCase())]
           return acc
         }, postings)
-      users_with_skill = await this.knex('tbl_Skill')
+      users_with_skill = await this.knex('skill')
         .select('user_id')
         .whereIn(this.knex.raw('LOWER("name")'), postings.skills)
         .map(e => e.user_id)
@@ -26,14 +26,14 @@ export default class UserModel {
       postings.categories = [job_category_id]
     }
 
-    const users_with_education = await this.knex('tbl_Education')
+    const users_with_education = await this.knex('education')
       .select('user_id')
       .whereIn('job_category_id', postings.categories)
       .map(e => e.user_id)
 
-    const education_category = this.knex('tbl_Education as education')
+    const education_category = this.knex('education')
       .select('education.*', 'category.name as category')
-      .leftJoin('tbl_JobCategory as category', 'education.job_category_id', 'category.id')
+      .leftJoin('job_category as category', 'education.job_category_id', 'category.id')
       .orderBy('education.end_date', 'desc')
       .as('education_category')
 
@@ -48,13 +48,13 @@ export default class UserModel {
         this.knex.raw(selectJsonArray(['school', 'id', 'school', 'category', 'start_date', 'end_date'], 'education_category', 'user_id', 'educations'))
       )
       .from(
-        'tbl_User as user',
-        'tbl_Skill as skill',
-        'tbl_Experience as experience',
+        'system_user as user',
+        'skill as skill',
+        'experience as experience',
         education_category
       )
-      .leftJoin('tbl_Skill as skill', 'user.id', 'skill.user_id')
-      .leftJoin('tbl_Experience as experience', 'user.id', 'experience.user_id')
+      .leftJoin('skill as skill', 'user.id', 'skill.user_id')
+      .leftJoin('experience as experience', 'user.id', 'experience.user_id')
       .leftJoin(education_category, 'user.id', 'education_category.user_id')
 
     if (province) {

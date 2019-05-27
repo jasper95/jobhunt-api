@@ -15,14 +15,14 @@ export default class JobModel {
         'job.*',
         this.knex.raw(selectJsonObject(['id', 'name', 'slug'], 'company')),
       )
-      .from('tbl_Job as job', 'tbl_Company as company')
-      .leftJoin('tbl_Company as company', 'job.company_id', 'company.id')
+      .from('job', 'company')
+      .leftJoin('company', 'job.company_id', 'company.id')
       .where({ [key]: id })
       .first()
 
     return {
       ...job,
-      applicants: await this.knex('tbl_Application')
+      applicants: await this.knex('application')
         .where({ job_id: job.id })
         .map(e => e.user_id)
     }
@@ -44,9 +44,9 @@ export default class JobModel {
         this.knex.raw(selectJsonObject(company_fields, 'company')),
         this.knex.raw(selectJsonObject(category_fields, 'category'))
       )
-      .from('tbl_Job as job', 'tbl_Company as company')
-      .leftJoin('tbl_Company as company', 'job.company_id', 'company.id')
-      .leftJoin('tbl_JobCategory as category', 'job.job_category_id', 'category.id')
+      .from('job as job', 'company')
+      .leftJoin('company', 'job.company_id', 'company.id')
+      .leftJoin('job_category as category', 'job.job_category_id', 'category.id')
 
     if (filters.length) {
       query = query.where((builder) => {
@@ -59,11 +59,11 @@ export default class JobModel {
   async getJobList(params) {
     const { company_id } = params
     const job_fields = ['id', 'name', 'description', 'address_description', 'slug', 'status']
-    const application = this.knex('tbl_Application as application')
+    const application = this.knex('application')
       .select('application.job_id', this.knex.raw('COUNT(application.job_id) as applicants_count'))
       .groupBy('application.job_id')
       .as('application')
-    return this.knex('tbl_Job as job')
+    return this.knex('job as job')
       .select(
         ...selectFields(job_fields, 'job'),
         'application.applicants_count'

@@ -1,7 +1,7 @@
 module.exports = {
   tables: [
     {
-      table_name: 'tbl_Company',
+      table_name: 'company',
       slug: true,
       columns: [
         {
@@ -34,7 +34,7 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_User',
+      table_name: 'system_user',
       columns: [
         {
           column_name: 'email',
@@ -124,7 +124,7 @@ module.exports = {
           column_name: 'company_id',
           type: 'uuid',
           foreign_key: true,
-          reference_table: 'tbl_Company',
+          reference_table: 'company',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -132,14 +132,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_UserAuth',
+      table_name: 'user_auth',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -158,14 +158,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_UserSession',
+      table_name: 'user_session',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -185,7 +185,7 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Experience',
+      table_name: 'experience',
       columns: [
         {
           column_name: 'position',
@@ -197,7 +197,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -219,14 +219,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Skill',
+      table_name: 'skill',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -244,7 +244,7 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_JobCategory',
+      table_name: 'job_category',
       columns: [
         {
           column_name: 'name',
@@ -254,14 +254,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Education',
+      table_name: 'education',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -271,7 +271,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_JobCategory',
+          reference_table: 'job_category',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -298,7 +298,7 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Job',
+      table_name: 'job',
       slug: true,
       columns: [
         {
@@ -306,7 +306,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_Company',
+          reference_table: 'company',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -361,7 +361,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_JobCategory',
+          reference_table: 'job_category',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -374,14 +374,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Application',
+      table_name: 'application',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -391,7 +391,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_Job',
+          reference_table: 'job',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -401,7 +401,7 @@ module.exports = {
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_Company',
+          reference_table: 'company',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'
@@ -419,14 +419,14 @@ module.exports = {
       ]
     },
     {
-      table_name: 'tbl_Notification',
+      table_name: 'notification',
       columns: [
         {
           column_name: 'user_id',
           type: 'uuid',
           foreign_key: true,
           required: true,
-          reference_table: 'tbl_User',
+          reference_table: 'system_user',
           reference_column: 'id',
           on_update: 'CASCADE',
           on_delete: 'RESTRICT'

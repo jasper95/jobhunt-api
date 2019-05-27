@@ -18,7 +18,7 @@ export default class JobController {
   }
 
   async updateJob({ params }) {
-    const job = await this.DB.updateById('tbl_Job', params)
+    const job = await this.DB.updateById('job', params)
     return {
       ...params,
       ...job

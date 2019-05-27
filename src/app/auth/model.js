@@ -8,7 +8,7 @@ class AuthModel {
   }
 
   async authenticateUser(user) {
-    const session = await this.DB.insert('tbl_UserSession', { user_id: user.id, status: 'Online', device_type: 'Web' })
+    const session = await this.DB.insert('user_session', { user_id: user.id, status: 'Online', device_type: 'Web' })
     return jwt.sign(session, process.env.AUTH_SECRET, {
       expiresIn: process.env.AUTH_VALIDITY
     })
@@ -16,13 +16,13 @@ class AuthModel {
 
   async getUserData(user) {
     if (user.role === 'ADMIN' && user.company_id) {
-      const company = await this.DB.find('tbl_Company', user.company_id)
+      const company = await this.DB.find('company', user.company_id)
       if (company) {
         user.company = company
       }
     }
     const { id } = user
-    user.unread_notifications = await this.knex('tbl_Notification')
+    user.unread_notifications = await this.knex('notification')
       .where({ user_id: id, status: 'unread' })
       .count()
       .first()

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import pathToRegexp from 'path-to-regexp'
 import {
   serviceLocator
-} from '../utils'
+} from 'utils'
 
 const public_routes = {
   GET: [
@@ -38,17 +38,13 @@ function matchRoutes(routes, req) {
 export default async function authMiddleware(req, res, next) {
   const DB = serviceLocator.get('DB')
   req.authenticated = true
-  const { token } = req.headers
+  const { authorization } = req.headers
   if (matchRoutes(public_routes, req)) {
     return next()
   }
-  if (matchRoutes(basic_auth_routes, req)) {
-    if (req.username !== process.env.BASIC_USERNAME
-      || req.authorization.basic.password !== process.env.BASIC_PASSWORD) {
-      req.auth_error = 'Invalid credentials'
-      req.authenticated = false
-    }
-  } else if (token) {
+  const token = authorization && authorization.includes('Bearer')
+    ? authorization.replace('Bearer ', '') : ''
+  if (token) {
     try {
       const { id, user_id } = jwt.verify(token, process.env.AUTH_SECRET)
       const [session, user] = await Promise.all([DB.find('user_session', id), DB.find('system_user', user_id)])
@@ -61,7 +57,13 @@ export default async function authMiddleware(req, res, next) {
       }
     } catch (err) {
       req.authenticated = false
-      req.auth_error = err.message
+      req.auth_error = 'Invalid access token'
+    }
+  } else if (matchRoutes(basic_auth_routes, req)) {
+    if (req.username !== process.env.BASIC_USERNAME
+      || req.authorization.basic.password !== process.env.BASIC_PASSWORD) {
+      req.auth_error = 'Invalid credentials'
+      req.authenticated = false
     }
   } else {
     req.auth_error = 'Authentication is required'

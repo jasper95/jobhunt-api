@@ -9,7 +9,14 @@ class AuthModel {
 
   async authenticateUser(user) {
     const session = await this.DB.insert('user_session', { user_id: user.id, status: 'Online', device_type: 'Web' })
-    return jwt.sign(session, process.env.AUTH_SECRET, {
+    return jwt.sign({
+      ...session,
+      hasura_claims: {
+        'x-hasura-allowed-roles': ['admin'],
+        'x-hasura-default-role': 'admin',
+        'x-hasura-user-id': user.id
+      }
+    }, process.env.AUTH_SECRET, {
       expiresIn: process.env.AUTH_VALIDITY
     })
   }

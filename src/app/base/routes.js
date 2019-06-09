@@ -23,7 +23,7 @@ const routes = {
   ],
   del: [
     {
-      url: '/:node',
+      url: '/:node/:id',
       handler: 'deleteNode'
     }
   ]

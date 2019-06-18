@@ -14,7 +14,8 @@ class AuthModel {
       hasura_claims: {
         'x-hasura-allowed-roles': ['admin'],
         'x-hasura-default-role': 'admin',
-        'x-hasura-user-id': user.id
+        'x-hasura-user-id': user.id,
+        'x-hasura-session-id': session.id
       }
     }, process.env.AUTH_SECRET, {
       expiresIn: process.env.AUTH_VALIDITY

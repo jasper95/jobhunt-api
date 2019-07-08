@@ -95,7 +95,8 @@ module.exports = {
         },
         {
           column_name: 'birth_date',
-          type: 'datetime'
+          type: 'timestamp',
+          type_params: [{ useTz: true }]
         },
         {
           column_name: 'address',
@@ -209,12 +210,14 @@ module.exports = {
         },
         {
           column_name: 'start_date',
-          type: 'datetime',
+          type: 'timestamp',
+          type_params: [{ useTz: true }],
           required: true
         },
         {
           column_name: 'end_date',
-          type: 'datetime'
+          type: 'timestamp',
+          type_params: [{ useTz: true }]
         }
       ]
     },
@@ -288,12 +291,14 @@ module.exports = {
         },
         {
           column_name: 'start_date',
-          type: 'datetime',
+          type: 'timestamp',
+          type_params: [{ useTz: true }],
           required: true
         },
         {
           column_name: 'end_date',
-          type: 'datetime'
+          type: 'timestamp',
+          type_params: [{ useTz: true }]
         }
       ]
     },
@@ -368,7 +373,8 @@ module.exports = {
         },
         {
           column_name: 'end_date',
-          type: 'datetime',
+          type: 'timestamp',
+          type_params: [{ useTz: true }],
           required: true
         }
       ]

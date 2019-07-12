@@ -7,11 +7,21 @@ module.exports = {
         "camelcase": 0,
         "no-param-reassign": 0,
         "import/prefer-default-export": 0,
-        "import/no-unresolved": 0,
         "no-throw-literal": 0
     },
     "globals": {
         "Promise": true,
         "util": true
-    }
+    },
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "moduleDirectory": [
+              "./node_modules",
+              "./src"
+            ]
+          }
+        }
+      }
+}
 };
